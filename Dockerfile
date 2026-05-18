@@ -2,8 +2,12 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-COPY target/expense-tracker-backend-0.0.1-SNAPSHOT.jar app.jar
+COPY . .
+
+RUN chmod +x mvnw || true
+
+RUN ./mvnw clean install || mvn clean install
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "target/expense-tracker-backend-0.0.1-SNAPSHOT.jar"]
