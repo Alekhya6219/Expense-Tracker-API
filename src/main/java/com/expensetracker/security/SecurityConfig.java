@@ -41,9 +41,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .headers(headers ->
+                        headers.frameOptions(frame -> frame.disable())
+                )
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()  // Public: login, register
+                .requestMatchers("/api/auth/**","/h2-console/**").permitAll()  // Public: login, register
                 .anyRequest().authenticated()                  // Everything else needs JWT
             )
             .sessionManagement(session ->
